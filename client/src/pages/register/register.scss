@@ -1,29 +1,30 @@
 .register {
   height: 100vh;
-  background-color: rgb(193, 190, 255);
+  //background-color: rgb(193, 190, 255);
+  background-image: linear-gradient(rgba(128, 128, 128, 0.5), rgba(128, 128, 128, 0.5)), url("../../../src/assets/jazz-background.png");
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
 
   .card {
-    width: 50%;
+    width: 60%;
     display: flex;
     flex-direction: row-reverse;
     background-color: white;
     border-radius: 10px;
-    min-height: 600px;
+    //min-height: 600px;
     overflow: hidden;
 
     .left {
       flex: 1;
-      background: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)),
-        url("https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600")
-          center;
+      background: linear-gradient(rgba(54, 53, 1, 0.6), rgba(54, 53, 1, 0.6)), url("../../../src/assets/jazz-social-bg2-sm.jpg") center;
       background-size: cover;
       padding: 50px;
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      justify-content: space-between;
+      gap: 15px;
       color: white;
 
       h1 {
@@ -32,6 +33,8 @@
       }
       
       p {
+        font-size: 18px;
+        line-height: 30px;
       }
 
       span {
@@ -42,11 +45,19 @@
         width: 50%;
         padding: 10px;
         border: none;
-        background-color: white;
-        color: rebeccapurple;
+        background-color: whitesmoke;
+        color: brown;
         font-weight: bold;
+        border-radius: 5px;
         cursor: pointer;
       }
+
+      button:hover {
+        color: beige;
+        scale: 105%;
+        background-color: chocolate;
+        border: 2px solid beige
+    }
     }
 
     .right {
@@ -58,7 +69,8 @@
       justify-content: center;
 
       h1 {
-      color: #555;
+        color:brown;
+        font-size: 50px;      
       }
       
       form {
@@ -76,11 +88,19 @@
           width: 50%;
           padding: 10px;
           border: none;
-          background-color: #938eef;
+          background-color: chocolate;
           color: white;
           font-weight: bold;
           cursor: pointer;
+          border-radius: 5px;
         }
+
+        button:hover{
+          scale: 105%;
+          background-color:whitesmoke;
+          color: chocolate;
+          border: 2px solid chocolate
+      }
       }
     }
   }
