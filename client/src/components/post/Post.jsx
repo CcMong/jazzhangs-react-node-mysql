@@ -6,15 +6,46 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import moment from "moment";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { makeRequest } from "../../axios";
+import { AuthContext } from "../../context/authContext";
 
 
 const Post = ({ post }) => {
-  const [commentOpen, setCommentOpen] = useState(false);
 
-  //TEMPORARY
-  const liked = false;
+  const [commentOpen, setCommentOpen] = useState(false);  
+
+  const { currentUser } = useContext (AuthContext);
+
+  //React Query
+  const { isLoading, error, data } = useQuery(['likes', post.id], () =>
+    makeRequest.get(`/likes?postId=${post.id}`).then(res => {
+      return res.data;
+    })
+  );
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation((liked) => {
+
+    if(liked) return makeRequest.delete(`/likes?postId=${post.id}`);
+    return makeRequest.post("/likes", { postId: post.id });
+  },
+  {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(["likes"]);
+    },
+  });
+
+  const handleLike = () => {
+    // Use a mutation because, when the like/un-like icon is clicked, we want to see a result immediately
+    mutation.mutate(data.includes(currentUser.id))
+
+
+  };
 
   return (
     <div className="post">
@@ -41,8 +72,12 @@ const Post = ({ post }) => {
         </div>
         <div className="info">
           <div className="item">
-            {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-            12 Likes
+            {isLoading 
+            ? ( "Loading..." )
+            : data.includes(currentUser.id) 
+            ? ( <FavoriteOutlinedIcon style={{color: "red"}} onClick={handleLike} /> ) 
+            : ( <FavoriteBorderOutlinedIcon onClick={handleLike} /> )}
+            {data.length} Likes
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />

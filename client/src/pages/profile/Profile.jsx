@@ -8,19 +8,43 @@ import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Posts from "../../components/posts/Posts"
+import Posts from "../../components/posts/Posts";
+import { useQuery, useQueryClient, useMutation } from "react-query";
+import { makeRequest } from "../../axios";
+import { useLocation } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+import { useContext } from "react";
 
 const Profile = () => {
+
+  const { currentUser } = useContext(AuthContext)
+
+  const userId = parseInt(useLocation().pathname.split("/")[2]);
+
+  const { isLoading, error, data } = useQuery(['user'], () =>
+    makeRequest.get(`/users/find/${userId}`).then(res => {
+      return res.data;
+    })
+  );
+
+  const handleFollow = () => {
+    
+  };
+
   return (
     <div className="profile">
+
+      {isLoading 
+      ? "Loading..." 
+      : <>
       <div className="images">
         <img
-          src="https://images.pexels.com/photos/13440765/pexels-photo-13440765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          src={data.coverPic}
           alt=""
           className="cover"
         />
         <img
-          src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
+          src={data.profilePic}
           alt=""
           className="profilePic"
         />
@@ -45,18 +69,20 @@ const Profile = () => {
             </a>
           </div>
           <div className="center">
-            <span>Jane Doe</span>
+            <span>{data.name}</span>
             <div className="info">
               <div className="item">
                 <PlaceIcon />
-                <span>USA</span>
+                <span>{data.city}</span>
               </div>
               <div className="item">
                 <LanguageIcon />
-                <span>lama.dev</span>
+                <span>{data.website}</span>
               </div>
             </div>
-            <button>follow</button>
+            {userId === currentUser.id 
+            ? (<button>Update</button>) 
+            : (<button onClick={handleFollow}>Follow</button>)}
           </div>
           <div className="right">
             <EmailOutlinedIcon />
@@ -65,6 +91,8 @@ const Profile = () => {
         </div>
       <Posts/>
       </div>
+      
+      </>}
     </div>
   );
 };

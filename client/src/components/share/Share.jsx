@@ -27,6 +27,7 @@ const Share = () => {
 
   const {currentUser} = useContext(AuthContext);
 
+  // Mutation
   const queryClient = useQueryClient();
 
   const mutation = useMutation((newPost) => {
