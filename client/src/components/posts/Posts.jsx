@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 
 const Posts = () => {
 
+  //React Query
   const { isLoading, error, data } = useQuery(['posts'], () =>
 
     makeRequest.get("/posts").then(res => {
